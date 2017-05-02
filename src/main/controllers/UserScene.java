@@ -13,21 +13,21 @@ public class UserScene {
     public ComboBox categoryComBox;
     public ComboBox periodComBox;
     public TableView advTable;
-    public TableView myAdvTable;
+    public TableView userAdvTable;
 
     public void goButtonPressed(ActionEvent actionEvent) {
 
     }
 
-    public void editAdvButtonPressed(ActionEvent actionEvent) {
+    public void editUserAdvButtonPressed(ActionEvent actionEvent) {
 
     }
 
-    public void deleteAdvButtonPressed(ActionEvent actionEvent) {
+    public void deleteUserAdvButtonPressed(ActionEvent actionEvent) {
 
     }
 
     public void addAdvButtonPressed(ActionEvent actionEvent) {
-        
+
     }
 }
