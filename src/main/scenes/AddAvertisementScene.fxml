@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.scenes.AddAvertisementScene">
+   <children>
+      <Label fx:id="addAdvTitleLable" layoutX="129.0" layoutY="54.0" text="Title:" />
+      <Label fx:id="addAdvDetailsLable" layoutX="110.0" layoutY="109.0" prefHeight="21.0" prefWidth="70.0" text="Details:" />
+      <Label fx:id="addAdvCateLable" layoutX="100.0" layoutY="255.0" prefHeight="21.0" prefWidth="70.0" text="Category:" />
+      <Label fx:id="addAdvPriceLable" layoutX="129.0" layoutY="303.0" prefHeight="21.0" prefWidth="41.0" text="Price:" />
+      <TextField fx:id="addAdvTitleTXTField" layoutX="183.0" layoutY="49.0" prefHeight="31.0" prefWidth="200.0" />
+      <TextField fx:id="addAdvPriceTXTField" layoutX="183.0" layoutY="298.0" prefHeight="31.0" prefWidth="200.0" />
+      <TextArea fx:id="advDetailTXTarea" layoutX="183.0" layoutY="87.0" prefHeight="132.0" prefWidth="200.0" />
+      <!--disable scroll bar later-->
+      <Button fx:id="addAdvertisementButton" layoutX="209.0" layoutY="346.0" mnemonicParsing="false" text="Add Advertisement" />
+      <ComboBox fx:id="addAdvCatComboBox" layoutX="183.0" layoutY="250.0" prefHeight="31.0" prefWidth="84.0" promptText="All" />
+   </children>
+</AnchorPane>
