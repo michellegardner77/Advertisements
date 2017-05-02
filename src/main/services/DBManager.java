@@ -3,55 +3,79 @@ package main.services;
 /**
  * Created by mgard on 4/30/2017.
  */
+
+import main.models.Users;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
- *
  * @author kuhail
  */
 public class DBManager {
     Connection connection;
 
-    public class Record {
-        public String ID;
-        public String Name;
+    public void connect(String userName,
+                        String password,
+                        String serverName,
+                        String portNumber,
+                        String schemaName)
+            throws SQLException, InstantiationException, IllegalAccessException {
+        System.out.println("Loading driver...");
 
-        public Record(String ID, String Name) {
-            this.ID = ID;
-            this.Name = Name;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            System.out.println("Driver loaded!");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Cannot find the driver in the classpath!", e);
         }
 
-        public String toString() {
-            return Name;
-        }
+        Connection conn = null;
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", userName);
+        connectionProps.put("password", password);
+        connectionProps.put("useSSL", "false");
+
+        conn = DriverManager.getConnection(
+                "jdbc:mysql://"
+                        + serverName
+                        + ":" + portNumber + "/" + schemaName,
+                connectionProps);
+
+        System.out.println("Connected to database");
+        this.connection = conn;
     }
 
-    public LinkedList<Record> getAccountTypes() {
-        LinkedList<Record> records = new LinkedList();
+    public List<Users> getUser(String userName) {
         PreparedStatement stmt = null;
+        List<Users> userResults = new ArrayList<>();
 
-        String query = "select * FROM Account_Types";
+        String query = "Select User_ID, UserFirst_Name, UserLast_Name From users Where User_ID=?";
 
         try {
             stmt = connection.prepareStatement(query);
+            stmt.setString(1, userName); //binding the parameter with the given string
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String account_type_id = rs.getString("Account_Type_ID");
-                String account_type_name = rs.getString("Account_Type_Name");
-                Record record = new Record(account_type_id, account_type_name);
-                records.add(record);
+                String user_ID = rs.getString("User_ID");
+                String userFirst_Name = rs.getString("UserFirst_Name");
+                String userLast_name = rs.getString("UserLast_Name");
+
+                Users user = new Users(user_ID, userFirst_Name, userLast_name);
+
+                userResults.add(user);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return records;
+            return userResults;
         }
-        return records;
+        return userResults;
     }
 }
 
