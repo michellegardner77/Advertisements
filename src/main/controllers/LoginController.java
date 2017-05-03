@@ -35,7 +35,7 @@ public class LoginController {
         }
 
         // made it here due to userTextField populated
-        // make sure requred label is hidden
+        // make sure required label is hidden
         if(requiredLabel.isVisible()){
             requiredLabel.setVisible(false);
         }
@@ -91,21 +91,23 @@ public class LoginController {
         }
 
         if(user.isModerator()) {
-            //TODO: go to moderator scene
-        }else{
             try {
-                // Create new stage fro userScene
-                Stage userSceneStage = new Stage();
+                // STAGE (window)
+                // Create new stage for moderatorStage
+                Stage moderatorStage = new Stage();
                 // Set Stage title (Window title)
-                userSceneStage.setTitle("Username: " + user.getUser_ID());
+                moderatorStage.setTitle("Moderator: " + user.getUser_ID());
+                // made stage / window not resizable
+                moderatorStage.setResizable(false);
 
+                // STAGE Contents (Scene)
                 // Load fxml file to generate scene (Make sure file patch is correct)
-                Parent userSceneFxml = FXMLLoader.load(getClass().getResource("../scenes/userScene.fxml"));
+                Parent moderatorSceneFxml = FXMLLoader.load(getClass().getResource("../scenes/moderatorScene.fxml"));
                 // Create new scene passing it the loaded Parent FXML object (file)
-                Scene userScene = new Scene(userSceneFxml);
-                // Set the userSceneStage to use the stage userStage
+                Scene moderatorScene = new Scene(moderatorSceneFxml);
+                // Set the moderatorStage to use the stage moderatorStage
                 // Think of the stage as the window with the "X" button and the scene the contents inside
-                userSceneStage.setScene(userScene);
+                moderatorStage.setScene(moderatorScene);
 
                 // Get current stage and close it.
                 // get source Node from actionEvent passed to action method
@@ -115,8 +117,43 @@ public class LoginController {
                 // Close the login window
                 loginStage.close();
 
-                // Show the userSceneStage which already has the userScene FXML loaded
-                userSceneStage.show();
+                // Show the moderatorStage which already has the userScene FXML loaded
+                moderatorStage.show();
+            }catch(IOException ex) {
+                //TODO: deal with later.
+                // Could be issues loading FXML file or something.
+                ex.printStackTrace();
+            }
+
+        }else{
+            try {
+                // STAGE (window)
+                // Create new stage fro userScene
+                Stage userStage = new Stage();
+                // Set Stage title (Window title)
+                userStage.setTitle("Username: " + user.getUser_ID());
+                // made stage / window not resizable
+                userStage.setResizable(false);
+
+                // STAGE Contents (Scene)
+                // Load fxml file to generate scene (Make sure file patch is correct)
+                Parent userSceneFxml = FXMLLoader.load(getClass().getResource("../scenes/userScene.fxml"));
+                // Create new scene passing it the loaded Parent FXML object (file)
+                Scene userScene = new Scene(userSceneFxml);
+                // Set the userStage to use the stage userStage
+                // Think of the stage as the window with the "X" button and the scene the contents inside
+                userStage.setScene(userScene);
+
+                // Get current stage and close it.
+                // get source Node from actionEvent passed to action method
+                Node source = (Node) actionEvent.getSource();
+                // calling the getWindow method to get the stage. Have to case to Stage
+                Stage loginStage = (Stage) source.getScene().getWindow();
+                // Close the login window
+                loginStage.close();
+
+                // Show the userStage which already has the userScene FXML loaded
+                userStage.show();
 
             } catch (IOException ex) {
                 //TODO: deal with later.

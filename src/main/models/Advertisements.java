@@ -3,7 +3,7 @@ package main.models;
 /**
  * Created by mgard on 4/30/2017.
  */
-public abstract class Advertisements{
+public class Advertisements{
     protected int advertisement_ID;
     protected String advTitle;
     protected String advDetails;
@@ -22,7 +22,6 @@ public abstract class Advertisements{
         this.moderator_ID = moderator_ID;
         this.category_ID = category_ID;
         this.status_ID = status_ID;
-
     }
 
     public int getAdvertisement_ID(){
