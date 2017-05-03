@@ -76,5 +76,31 @@ public class DBManager {
         }
         return user;
     }
+
+    // asking database if the username is a moderator, and will return true or false
+    public boolean isModerator(String userName) {
+        PreparedStatement stmt = null;
+
+        String query = "Select Moderator_ID From moderators Where Moderator_ID=?";
+
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, userName); //binding the parameter with the given string
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String moderator_ID = rs.getString("Moderator_ID");
+
+                if(moderator_ID != null){
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+        return false;
+    }
+
 }
 

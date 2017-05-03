@@ -6,11 +6,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
  * Created by mgard on 5/2/2017.
  */
-public class ModeratorScene {
+public class ModeratorController {
     public Tab modUnclaimedPanel;
     public Pane moderatorUnclaimedTab;
     public ComboBox categoryComBox;
@@ -19,7 +20,6 @@ public class ModeratorScene {
     public ComboBox periodComBox;
     public Tab moderatorAdvTab;
     public TableView moderatorAdvTable;
-
 
     public void uncGoButtonPressed(ActionEvent actionEvent) {
     }

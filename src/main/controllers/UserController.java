@@ -4,11 +4,12 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * Created by mgard on 5/2/2017.
  */
-public class UserScene {
+public class UserController {
     public TextField titleDescTextField;
     public ComboBox categoryComBox;
     public ComboBox periodComBox;

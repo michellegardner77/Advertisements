@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.UserScene">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.UserController">
     <TabPane layoutX="-5.0" layoutY="54.0" prefHeight="347.0" prefWidth="611.0" tabClosingPolicy="UNAVAILABLE">
         <Tab text="Advertisements">
             <Pane prefHeight="200.0" prefWidth="200.0">
