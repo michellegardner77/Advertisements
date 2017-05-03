@@ -3,20 +3,20 @@ package main.models;
 /**
  * Created by mgard on 4/30/2017.
  */
-public class Users{
+public class User {
 
     protected String user_ID;
     protected String userFirst_Name;
     protected String userLast_Name;
     protected boolean isModerator = false;
 
-    public Users (String user_ID, String userFirst_Name, String userLast_Name){
+    public User(String user_ID, String userFirst_Name, String userLast_Name){
         this.user_ID = user_ID;
         this.userFirst_Name = userFirst_Name;
         this.userLast_Name = userLast_Name;
     }
 
-    public Users (String user_ID, String userFirst_Name, String userLast_Name, boolean isModerator){
+    public User(String user_ID, String userFirst_Name, String userLast_Name, boolean isModerator){
         this.user_ID = user_ID;
         this.userFirst_Name = userFirst_Name;
         this.userLast_Name = userLast_Name;

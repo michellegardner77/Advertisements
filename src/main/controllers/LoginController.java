@@ -1,14 +1,13 @@
 package main.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import main.models.Users;
+import main.models.User;
 import main.services.DBManager;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,8 +37,6 @@ public class LoginController {
             requiredLable.setVisible(false);
         }
 
-
-
         DBManager dbManager = new DBManager();
         try {
             dbManager.connect("adv_user", "1234", "localhost", "3306", "advertisements");
@@ -55,13 +52,21 @@ public class LoginController {
         }
 
         // check that user exists in database
-        List<Users> users = dbManager.getUser(userTextField.getText());
-//        for (Users user:users)
-//        {
-//            System.out.println(user.getUser_ID());
-//            System.out.println(user.getUserFirst_Name());
-//            System.out.println(user.getUserLast_Name());
-//        }
+        User user = dbManager.getUser(userTextField.getText());
+
+        // check to make sure user exists
+        // shows error if nothing returns from database
+        if(user == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("User does not exist!");
+
+            alert.showAndWait();
+            return;
+        }
+
+
     }
 
 }

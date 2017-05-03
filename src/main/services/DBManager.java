@@ -4,7 +4,7 @@ package main.services;
  * Created by mgard on 4/30/2017.
  */
 
-import main.models.Users;
+import main.models.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -52,9 +52,9 @@ public class DBManager {
         this.connection = conn;
     }
 
-    public List<Users> getUser(String userName) {
+    public User getUser(String userName) {
         PreparedStatement stmt = null;
-        List<Users> userResults = new ArrayList<>();
+        User user = null;
 
         String query = "Select User_ID, UserFirst_Name, UserLast_Name From users Where User_ID=?";
 
@@ -67,15 +67,14 @@ public class DBManager {
                 String userFirst_Name = rs.getString("UserFirst_Name");
                 String userLast_name = rs.getString("UserLast_Name");
 
-                Users user = new Users(user_ID, userFirst_Name, userLast_name);
+                user = new User(user_ID, userFirst_Name, userLast_name);
 
-                userResults.add(user);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return userResults;
+            return user;
         }
-        return userResults;
+        return user;
     }
 }
 
