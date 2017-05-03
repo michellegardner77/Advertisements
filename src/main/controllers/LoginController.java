@@ -43,7 +43,7 @@ public class LoginController {
         // Create new DBManager object that is used to connect to the Database and run queries
         DBManager dbManager = new DBManager();
 
-        //intiate database connection with DBManager
+        //initiate database connection with DBManager
         try {
             dbManager.connect("adv_user", "1234", "localhost", "3306", "advertisements");
         } catch (Exception ex){
