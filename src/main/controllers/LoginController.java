@@ -3,6 +3,7 @@ package main.controllers;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import main.models.Users;
 import main.services.DBManager;
@@ -14,6 +15,7 @@ import java.util.Objects;
 public class LoginController {
     public TextField userTextField;
     public ComboBox typeComboBox;
+    public Label requiredLable;
 
     // method called when Login Button is pressed
     public void loginAction(ActionEvent actionEvent) {
@@ -22,6 +24,21 @@ public class LoginController {
 //        System.out.println(typeComboBox.getValue());
 
         boolean isModerator = false;
+
+        // evaluating that userTextField is populated
+        // if not it will show the require label
+        if(userTextField.getText().isEmpty()){
+            requiredLable.setVisible(true);
+            return;
+        }
+
+        // made it here due to userTextField populated
+        // make sure requred label is hidden
+        if(requiredLable.isVisible()){
+            requiredLable.setVisible(false);
+        }
+
+
 
         DBManager dbManager = new DBManager();
         try {
