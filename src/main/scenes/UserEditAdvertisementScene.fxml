@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="348.0" prefWidth="345.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.EditAdvertisementController">
+   <children>
+      <Label layoutX="81.0" layoutY="40.0" text="Title:" />
+      <Label layoutX="43.0" layoutY="110.0" text="Description:" />
+      <Label layoutX="56.0" layoutY="183.0" text="Category:" />
+      <Label layoutX="81.0" layoutY="231.0" text="Price:" />
+      <Button fx:id="submitEditButton" layoutX="149.0" layoutY="286.0" mnemonicParsing="false" onAction="#userSubmitEditButtonPressed" text="Submit Edit" />
+      <TextField fx:id="userEditTextField" layoutX="119.0" layoutY="36.0" />
+      <TextArea fx:id="userEditDescTextArea" layoutX="119.0" layoutY="92.0" prefHeight="69.0" prefWidth="149.0" />
+      <TextField fx:id="userEditPriceTextField" layoutX="119.0" layoutY="227.0" />
+      <ComboBox fx:id="userEditComboBox" layoutX="119.0" layoutY="179.0" prefHeight="25.0" prefWidth="100.0" promptText="Select">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="CAT" />
+               <String fx:value="HOU" />
+               <String fx:value="ELC" />
+               <String fx:value="CCA" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <Label fx:id="required1" layoutX="279.0" layoutY="40.0" text="Required" textFill="RED" visible="false" />
+      <Label fx:id="required11" layoutX="279.0" layoutY="119.0" text="Required" textFill="RED" visible="false" />
+      <Label fx:id="required111" layoutX="244.0" layoutY="183.0" text="Required" textFill="RED" visible="false" />
+      <Label fx:id="required112" layoutX="279.0" layoutY="231.0" text="Required" textFill="RED" visible="false" />
+   </children>
+</AnchorPane>
