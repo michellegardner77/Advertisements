@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Objects;
 
+import main.models.User;
 import main.services.DBManager;
 
 /**
@@ -22,50 +23,46 @@ public class AddAdvertisementController {
     public Label requiredLabel;
     public Label requiredLabel2;
     public Label requiredLabel3;
-    Connection connection;
+    public Label requiredLabel4;
     public ComboBox typeComboBox;
 
-    // We want to take the inputted data and put it into our table
-    public boolean addAd(String adTitle, String adDetails, double Price, String category_id, String user_id) {
-        PreparedStatement stmt = null;
+    private User user;
+    private DBManager dbManager;
 
-        String query = "INSERT into Advertisements (AdvTitle, AdvDetails, AdvDateTime, Price, Category_ID, User_ID, Moderator_ID, Status_ID) VALUES (?,?,CURRENT_DATE(),?,?,?,NULL, 'PN')";
+    // method to pass DBManager to controller
+    void setDbManager(DBManager dbManager){
+        this.dbManager = dbManager;
+    }
 
-        try {
-            stmt = connection.prepareStatement(query);
-            stmt.setString(1, adTitle); //binding the parameter with the given string
-            stmt.setString(2, adDetails);
-            stmt.setDouble(3, Price);      //I AM NOT SURE IF YOU SKIP 3 BECAUSE OF DATE
-            stmt.setString(4, category_id);
-            stmt.setString(5, user_id);
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
+    // method to pass current user to controller
+    void setUser(User user) {
+        this.user = user;
     }
 
 
     public void addAdvertisementButtonPressed(ActionEvent actionEvent) {
-
+        String advComboBox = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
         // TODO: add advertisement stuff and validation
         // a while loop that checks text fields are filed out.
-        while (addAdvTitleTextField.getText().isEmpty() || advDetailTextArea.getText().isEmpty() || addAdvPriceTextField.getText().isEmpty()) {
+        if (addAdvTitleTextField.getText().isEmpty() || advDetailTextArea.getText().isEmpty() || addAdvPriceTextField.getText().isEmpty() || advComboBox.isEmpty()) {
+            advComboBox = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
             requiredLabel.setVisible(true);
             requiredLabel2.setVisible(true);
             requiredLabel3.setVisible(true);
+            requiredLabel4.setVisible(true);
             return;
         }
 
         String advertisementTitle;
         String advertisementDetail;
         String advertisementPrice;
+        String advertisementCategory;
         Double advPrice;
 
         advertisementTitle = addAdvTitleTextField.getText();
         advertisementDetail = advDetailTextArea.getText();
         advertisementPrice = addAdvPriceTextField.getText();
+        advertisementCategory = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
 
         // checks to make sure Price is a double and turns it into a double
         try {
@@ -80,11 +77,13 @@ public class AddAdvertisementController {
             alert.showAndWait();
             return;
         }
-
-        String selected_text = typeComboBox.getValue().toString();
+//
+//        String selected_type = typeComboBox.getValue().toString();
         // TODO: get user from previous page to use for addAD user_id
 
-
+        // pass dbManager object from loginController to other scenes
+        // addAdv modal return to main then add or have modal do insert statement
+        // refresh table and have new rows added in
 //        // evaluating that addAdvTitleTextField is populated
 //        // if not it will show the require label
 //        if(addAdvTitleTextField.getText().isEmpty()){
@@ -134,7 +133,9 @@ public class AddAdvertisementController {
 
         // Get current stage and close it.
         // get source Node from actionEvent passed to action method     cat
-        addAd(advertisementTitle, advertisementDetail, advPrice, selected_text, " " );
+
+
+       dbManager.addAdvertisement(advertisementTitle, advertisementDetail, advPrice, advertisementCategory, " " );
 
         Node source = (Node) actionEvent.getSource();
         // calling the getWindow method to get the stage. Have to case to Stage

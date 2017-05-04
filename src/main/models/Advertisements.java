@@ -1,5 +1,7 @@
 package main.models;
 
+import main.services.DBManager;
+
 /**
  * Created by mgard on 4/30/2017.
  */
@@ -12,6 +14,7 @@ public class Advertisements{
     protected String moderator_ID;
     protected String category_ID;
     protected String status_ID;
+    public DBManager dbManager;
 
     public Advertisements(int advertisement_ID, double price, String advTitle, String advDetails, String advDateTime,String  moderator_ID, String category_ID, String status_ID){
         this.advertisement_ID = advertisement_ID;

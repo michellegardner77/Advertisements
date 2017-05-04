@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.models.User;
 import main.services.DBManager;
@@ -20,6 +21,8 @@ public class LoginController {
     public TextField userTextField;
     public ComboBox typeComboBox;
     public Label requiredLabel;
+    public DBManager dbManager;
+
 
     // method called when Login Button is pressed
     public void loginAction(ActionEvent actionEvent) {
@@ -93,21 +96,35 @@ public class LoginController {
         if(user.isModerator()) {
             try {
                 // STAGE (window)
-                // Create new stage for moderatorStage
+                // Create new stage fro moderatorScene
                 Stage moderatorStage = new Stage();
                 // Set Stage title (Window title)
-                moderatorStage.setTitle("Moderator: " + user.getUser_ID());
+                moderatorStage.setTitle("Username: " + user.getUser_ID());
                 // made stage / window not resizable
                 moderatorStage.setResizable(false);
 
                 // STAGE Contents (Scene)
-                // Load fxml file to generate scene (Make sure file patch is correct)
-                Parent moderatorSceneFxml = FXMLLoader.load(getClass().getResource("../scenes/moderatorScene.fxml"));
-                // Create new scene passing it the loaded Parent FXML object (file)
-                Scene moderatorScene = new Scene(moderatorSceneFxml);
-                // Set the moderatorStage to use the stage moderatorStage
+                // Load fxml file to FMXLoader(Make sure file patch is correct)
+                FXMLLoader moderatorSceneLoader = new FXMLLoader(getClass().getResource("../scenes/moderatorScene.fxml"));
+
+                // Create initial pane (anchorPane) for scene object.
+                AnchorPane moderatorAnchorPane = moderatorSceneLoader.load();
+
+                // Get instance of moderatorController to call it's methods to set properties
+                ModeratorController moderatorController = moderatorSceneLoader.getController();
+
+                // set db manager property on userController
+                moderatorController.setDbManager(dbManager);
+                // ser user property on userController
+                moderatorController.setUser(user);
+
+                // Create new scene passing it the AnchorPane object
+                Scene userScene = new Scene(moderatorAnchorPane);
+
+                // Set the userStage to use the stage userStage
                 // Think of the stage as the window with the "X" button and the scene the contents inside
-                moderatorStage.setScene(moderatorScene);
+                moderatorStage.setScene(userScene);
+
 
                 // Get current stage and close it.
                 // get source Node from actionEvent passed to action method
@@ -117,8 +134,9 @@ public class LoginController {
                 // Close the login window
                 loginStage.close();
 
-                // Show the moderatorStage which already has the userScene FXML loaded
+                // Show the moderatorStage which already has the moderatorScene FXML loaded
                 moderatorStage.show();
+
             }catch(IOException ex) {
                 //TODO: deal with later.
                 // Could be issues loading FXML file or something.
@@ -126,6 +144,7 @@ public class LoginController {
             }
 
         }else{
+            // user stage
             try {
                 // STAGE (window)
                 // Create new stage fro userScene
@@ -136,13 +155,27 @@ public class LoginController {
                 userStage.setResizable(false);
 
                 // STAGE Contents (Scene)
-                // Load fxml file to generate scene (Make sure file patch is correct)
-                Parent userSceneFxml = FXMLLoader.load(getClass().getResource("../scenes/userScene.fxml"));
-                // Create new scene passing it the loaded Parent FXML object (file)
-                Scene userScene = new Scene(userSceneFxml);
+                // Load fxml file to FMXLoader(Make sure file patch is correct)
+                FXMLLoader userSceneLoader = new FXMLLoader(getClass().getResource("../scenes/userScene.fxml"));
+
+                // Create initial pane (anchorPane) for scene object.
+                AnchorPane userAnchorPane = userSceneLoader.load();
+
+                // Get instance of userController to call it's methods to set properties
+                UserController userController = userSceneLoader.getController();
+
+                // set db manager property on userController
+                userController.setDbManager(dbManager);
+                // ser user property on userController
+                userController.setUser(user);
+
+                // Create new scene passing it the AnchorPane object
+                Scene userScene = new Scene(userAnchorPane);
+
                 // Set the userStage to use the stage userStage
                 // Think of the stage as the window with the "X" button and the scene the contents inside
                 userStage.setScene(userScene);
+
 
                 // Get current stage and close it.
                 // get source Node from actionEvent passed to action method

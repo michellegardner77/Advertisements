@@ -104,59 +104,38 @@ public class DBManager {
         return false;
     }
 
-    public List<Advertisements> getAdvertisements(String cat, String period){
-        PreparedStatement stmt = null;
+    // Return everything = ("%", "CURRENT_DATE()", "%")
+    // Return only ELC ("ELC", "CURRENT_DATE()", "%")
+    // Return last three months ("ELC", "3", "%")
+    // Return title/desc like Smart ("ELC", "3", "Smart")
+    public List<Advertisements> getAdvertisements(String cat, String period, String advTitleDesc){
+        PreparedStatement stmt;
         List<Advertisements> advertisementsList = new ArrayList<>();
 
-        String periodFilter = null;
-        String catFilter = null;
-//        int periodFilter2 = 0;
+        String periodQuery = "?";
 
-        String query = "SELECT AdvTitle, AdvDetails, Price, AdvDateTime " +
-                "FROM Advertisements " +
-                "INNER JOIN Categories ON Advertisements.Category_ID = Categories.Category_ID " +
-                "WHERE Advertisements.Category_ID LIKE ?" +
-                    "AND TIMESTAMPDIFF(MONTH, AdvDateTime, CURRENT_DATE()) <= ?";
-
-        // Deal with either ALL time period or specific period (3, 6, 12, ...)
-        if (Objects.equals(period, "Life")) {
-            periodFilter = "CURRENT_DATE()";
-        } else {
-            // TODO: Get other period numbers as strings, Make sure a number is passed else wont work!!
-
-                // check if string is number
-                // if string is then add it to period filter
-            switch(period) {
-                case "3 Months":
-                        periodFilter = "3";
-//                        periodFilter2 = 3;
-                        break;
-                case "6 Months":
-                        periodFilter = "6";
-//                        periodFilter2 = 6;
-                        break;
-                case "12 Months":
-                        periodFilter = "12";
-//                        periodFilter2 = 12;
-                        break;
-                default:
-                        break;
-
-            }
+        // Injecting function into sql statement if passed in as string else will stay as prepared string
+        if(Objects.equals(period, "CURRENT_DATE()")){
+            periodQuery = period;
         }
 
-        // check if cat passed in is All for a wild card search or a specified one
-        if (Objects.equals(cat, "All")){
-            // if all set to wildcard to get all cats
-            catFilter = "%";
-        } else {
-            catFilter = cat;
-        }
+        String query = "SELECT Advertisement_ID, AdvTitle, AdvDetails, AdvDateTime, Price, User_ID, Moderator_ID, Category_ID, Status_ID " +
+                "FROM Advertisements adv " +
+                "WHERE Category_ID LIKE ?" +
+                    "AND (AdvTitle LIKE ? OR AdvDetails LIKE ?)" +
+                    "AND TIMESTAMPDIFF(MONTH, AdvDateTime, CURRENT_DATE()) <= " + periodQuery;
 
         try {
             stmt = connection.prepareStatement(query);
             stmt.setString(1, cat); //binding the parameter with the given string
-            stmt.setString(2, periodFilter); //binding the parameter with the given string
+            stmt.setString(2, "%"+advTitleDesc+"%"); //binding the parameter with the given string
+            stmt.setString(3, "%"+advTitleDesc+"%"); //binding the parameter with the given string
+
+            // if period parameter is not CURRENT_DATE() function then just set ? to query values
+            if(!Objects.equals(period, "CURRENT_DATE()")) {
+                stmt.setString(4, period); //binding the parameter with the given string
+            }
+
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int adv_id = rs.getInt("Advertisement_ID");
@@ -174,11 +153,32 @@ public class DBManager {
                 advertisementsList.add(adv);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return advertisementsList;
         }
         return advertisementsList;
     }
 
+    // We want to take the inputted data and put it into our table
+    public boolean addAdvertisement(String adTitle, String adDetails, double Price, String category_id, String user_id) {
+        PreparedStatement stmt = null;
+
+        String query = "INSERT into Advertisements (AdvTitle, AdvDetails, AdvDateTime, Price, Category_ID, User_ID, Moderator_ID, Status_ID) VALUES (?,?,CURRENT_DATE(),?,?,?,NULL, 'PN')";
+
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, adTitle); //binding the parameter with the given string
+            stmt.setString(2, adDetails);
+            stmt.setDouble(3, Price);      //I AM NOT SURE IF YOU SKIP 3 BECAUSE OF DATE
+            stmt.setString(4, category_id);
+            stmt.setString(5, user_id);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+    }
 }
 
