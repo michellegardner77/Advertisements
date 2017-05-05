@@ -128,7 +128,7 @@ public class DBManager {
             modFilter1 = "";
             modFilter2 = "IS NULL";
         } else if(Objects.equals(advMod, "%")){ // deal with wildcard with null column values
-            modFilter1 = "= \"%\" ";
+            modFilter1 = "LIKE \"%\" ";
             modFilter2 = "OR adv.Moderator_ID IS NULL";
         }
 
@@ -173,6 +173,7 @@ public class DBManager {
     }
 
     // Method to call database to get all users advs based on 1 filter
+    @SuppressWarnings("Duplicates")
     public List<Advertisements> getMyAdvertisements(String userId){
         PreparedStatement stmt;
 
@@ -187,6 +188,33 @@ public class DBManager {
         try {
             stmt = connection.prepareStatement(query);
             stmt.setString(1, userId); //binding the parameter with the given string
+
+            rs = stmt.executeQuery();
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        // Call method to take result set and turn into array list.
+        return  resultSetToAdvList(rs);
+    }
+
+    // Method to call database to get all users advs based on 1 filter
+    public List<Advertisements> getModAdvertisements(String modId){
+        PreparedStatement stmt;
+
+        String query = "SELECT adv.Advertisement_ID, adv.AdvTitle, adv.AdvDetails, adv.AdvDateTime, adv.Price, adv.User_ID, adv.Moderator_ID, adv.Category_ID, Categories.Category_Name, adv.Status_ID, Statuses.Status_Name " +
+                "FROM Advertisements adv " +
+                "INNER JOIN Categories ON adv.Category_ID = Categories.Category_ID " +
+                "INNER JOIN Statuses ON adv.Status_ID = Statuses.Status_ID " +
+                "WHERE adv.Moderator_ID = ? ";
+
+        ResultSet rs;
+
+        //noinspection Duplicates
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, modId); //binding the parameter with the given string
 
             rs = stmt.executeQuery();
 

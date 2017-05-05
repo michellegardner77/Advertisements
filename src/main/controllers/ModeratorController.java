@@ -146,7 +146,7 @@ public class ModeratorController {
     private void reloadModAdvTable(){
 
         // Get my advertisements
-        myAdvList = dbManager.getMyAdvertisements(user.getUser_ID());
+        myAdvList = dbManager.getModAdvertisements(user.getUser_ID());
 
         // Add Advs to ObservableList to populate table
         myAdvObservableList = FXCollections.observableList(myAdvList);

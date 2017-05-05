@@ -100,7 +100,7 @@ public class LoginController {
                 // Create new stage fro moderatorScene
                 Stage moderatorStage = new Stage();
                 // Set Stage title (Window title)
-                moderatorStage.setTitle("Username: " + user.getUser_ID());
+                moderatorStage.setTitle("Moderator: " + user.getUser_ID());
                 // made stage / window not resizable
                 moderatorStage.setResizable(false);
 
