@@ -227,6 +227,23 @@ public class DBManager {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public boolean deleteUserAdvertisement(int advId, String userId) {
+        PreparedStatement stmt = null;
+
+        String query = "DELETE FROM Advertisements WHERE advertisement_ID = ? AND User_ID=?";
+
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, advId);
+            stmt.setString(2, userId);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
 
     }
 

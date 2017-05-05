@@ -18,6 +18,7 @@ import main.services.DBManager;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by mgard on 5/2/2017.
@@ -213,10 +214,25 @@ public class UserController {
     // select advertisement to delete
     // TODO: test later
     public void deleteUserAdvButtonPressed(ActionEvent actionEvent) {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete this advertisement?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() != ButtonType.OK){
+            return;
+        }
+
         ObservableList<Advertisements> advertisementsSelected, allAdvertisements;
-        allAdvertisements = filteredAllAdvTableView.getItems();
-        advertisementsSelected = filteredAllAdvTableView.getSelectionModel().getSelectedItems();
+        allAdvertisements = userAdvTable.getItems();
+        advertisementsSelected = userAdvTable.getSelectionModel().getSelectedItems();
         // TODO: delete row from database
+        for (Advertisements selectedAdv:advertisementsSelected) {
+            dbManager.deleteUserAdvertisement(selectedAdv.getAdvertisement_ID(), user.getUser_ID());
+
+        }
         advertisementsSelected.forEach(allAdvertisements::remove); // for all ads that have been selected, remove them from allAdvertisements
 
 
