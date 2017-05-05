@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import main.models.Advertisements;
 import main.models.User;
 import main.services.DBManager;
 
@@ -11,17 +12,18 @@ import main.services.DBManager;
  * Created by mgard on 5/4/2017.
  */
 public class EditAdvertisementController {
-    public TextField userEditTextField;
-    public TextArea userEditDescTextArea;
-    public TextField userEditPriceTextField;
-    public Label requiredLabel;
+    public TextField advTitleTextField;
+    public TextArea advDescTextArea;
+    public TextField advPriceTextField;
+    public Label requiredLabel1;
     public Label requiredLabel2;
     public Label requiredLabel3;
     public Label requiredLabel4;
-    public ComboBox typeComboBox;
+    public ComboBox<String> advTypeCombox;
 
     private User user;
     private DBManager dbManager;
+    private Advertisements advertisement;
 
     // method to pass DBManager to controller
     void setDbManager(DBManager dbManager){
@@ -33,34 +35,35 @@ public class EditAdvertisementController {
         this.user = user;
     }
 
+    void setAdvertisement(Advertisements advertisement){
+        this.advertisement  = advertisement;
+
+        advTitleTextField.setText(advertisement.getAdvTitle());
+        advDescTextArea.setText(advertisement.getAdvDetails());
+        advPriceTextField.setText(String.valueOf(advertisement.getPrice()));
+        advTypeCombox.setValue(advertisement.getCategory_ID());
+
+    }
+
     public void userSubmitEditButtonPressed(ActionEvent actionEvent) {
 
-        String editComboBox = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
+        String editComboBox = String.valueOf(advTypeCombox.getSelectionModel().getSelectedItem());
 
-        if (userEditTextField.getText().isEmpty() || userEditDescTextArea.getText().isEmpty() || userEditPriceTextField.getText().isEmpty() || editComboBox.isEmpty()) {
-            editComboBox = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
-            requiredLabel.setVisible(true);
+        //noinspection Duplicates
+        if (advTitleTextField.getText().isEmpty() || advDescTextArea.getText().isEmpty() || advPriceTextField.getText().isEmpty() || editComboBox.isEmpty()) {
+            requiredLabel1.setVisible(true);
             requiredLabel2.setVisible(true);
             requiredLabel3.setVisible(true);
             requiredLabel4.setVisible(true);
             return;
         }
 
-        String editAdvertisementTitle;
-        String editAdvertisementDesc;
-        String editAdvertisementPrice;
-        String editAdvertisementCategory;
-        Double editAdvPrice;
-
-        editAdvertisementTitle = userEditTextField.getText();
-        editAdvertisementDesc = userEditDescTextArea.getText();
-        editAdvertisementPrice = userEditPriceTextField.getText();
-        editAdvertisementCategory = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
-
         // checks to make sure Price is a double and turns it into a double
+        //noinspection Duplicates
         try {
-            editAdvPrice = Double.parseDouble(editAdvertisementPrice);
+            Double.parseDouble(advPriceTextField.getText());
         } catch (NumberFormatException e) {
+
             // print out error, not a double
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Not a valid price");

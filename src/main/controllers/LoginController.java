@@ -1,6 +1,7 @@
 package main.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -8,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.models.User;
@@ -27,7 +29,7 @@ public class LoginController {
     public void loginAction(ActionEvent actionEvent) {
 //        System.out.println("Login button pressed.");
 //        System.out.println(userTextField.getText());
-//        System.out.println(typeComboBox.getValue());
+//        System.out.println(advTypeCombox.getValue());
 
         // evaluating that userTextField is populated
         // if not it will show the require label
@@ -199,6 +201,12 @@ public class LoginController {
         }
 
 
+    }
+
+    // call Login action when pressed Enter in textfield
+    @FXML
+    public void onEnter(ActionEvent ae){
+        loginAction(ae);
     }
 
 }

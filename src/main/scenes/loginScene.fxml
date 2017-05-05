@@ -13,7 +13,7 @@
 <AnchorPane prefHeight="150.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.LoginController">
     <VBox maxWidth="275.0" prefHeight="150.0">
         <Pane prefHeight="87.0" prefWidth="300.0">
-            <TextField fx:id="userTextField" layoutX="112.0" layoutY="11.0" />
+            <TextField fx:id="userTextField" layoutX="112.0" layoutY="11.0" onAction="#onEnter" />
             <ComboBox fx:id="typeComboBox" layoutX="111.0" layoutY="44.0" prefWidth="150.0">
                 <!--combo-box items for menu-->
                 <items>

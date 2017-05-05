@@ -165,6 +165,14 @@ public class UserController {
     }
 
     public void editUserAdvButtonPressed(ActionEvent actionEvent) {
+
+        Advertisements selectedAdvertisement = userAdvTable.getSelectionModel().getSelectedItem();
+
+        // doesn't do anything if nothing is selected
+        if(selectedAdvertisement == null){
+            return;
+        }
+
         // TODO: get row selected information
         try {
             // STAGE (window)
@@ -190,6 +198,8 @@ public class UserController {
             // ser user property on userEditController
             userEditAdvertisementController.setUser(user);
 
+            userEditAdvertisementController.setAdvertisement(selectedAdvertisement);
+
             // Create new scene passing it the AnchorPane object
             Scene userEditAdvertisementScene = new Scene(userEditAdvertisementAnchorPane);
 
@@ -202,6 +212,8 @@ public class UserController {
             userEditAdvertisementStage.initModality(Modality.APPLICATION_MODAL);
             // Show the addAdvertisementStage which already has the userScene FXML loaded
             userEditAdvertisementStage.showAndWait();
+
+            reloadMyAdvTable(); // reload after edit
 
         } catch (IOException ex) {
             //TODO: deal with later.
@@ -228,7 +240,7 @@ public class UserController {
         ObservableList<Advertisements> advertisementsSelected, allAdvertisements;
         allAdvertisements = userAdvTable.getItems();
         advertisementsSelected = userAdvTable.getSelectionModel().getSelectedItems();
-        // TODO: delete row from database
+        // delete row from database
         for (Advertisements selectedAdv:advertisementsSelected) {
             dbManager.deleteUserAdvertisement(selectedAdv.getAdvertisement_ID(), user.getUser_ID());
 

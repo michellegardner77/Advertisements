@@ -78,7 +78,7 @@ public class AddAdvertisementController {
             return;
         }
 //
-//        String selected_type = typeComboBox.getValue().toString();
+//        String selected_type = advTypeCombox.getValue().toString();
         // TODO: get user from previous page to use for addAD user_id
 
         // pass dbManager object from loginController to other scenes
