@@ -4,9 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,18 +16,16 @@ import main.models.User;
 import main.services.DBManager;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 /**
  * Created by mgard on 5/2/2017.
  */
 public class UserController {
     public TextField titleDescTextField;
-    public TableView<Advertisements> allAdvTableView;
-    public TableView userAdvTable;
+    public TableView<Advertisements> filteredAllAdvTableView;
+    public TableView<Advertisements> userAdvTable;
     public ComboBox catComBox;
     public ComboBox periodComBox;
     // user adv table cols
@@ -49,10 +45,15 @@ public class UserController {
     private User user;
     private DBManager dbManager;
 
-    // List if filtered Adv for All Adv list
+    // List of filtered Adv for All Adv list
     private List<Advertisements> filteredAllAdvList = null;
     // ObservableList of advs to populate all adv table view
-    private ObservableList<Advertisements> advertisementsObservableList = null;
+    private ObservableList<Advertisements> filteredAllAdvObservableList = null;
+
+    // List of users Advs
+    private List<Advertisements> myAdvList = null;
+    // ObservableList of advs to populate all my adv table view
+    private ObservableList<Advertisements> myAdvObservableList = null;
 
     private int selectedTabIndex;
 
@@ -113,7 +114,7 @@ public class UserController {
         return titleDescValue;
     }
 
-    void reloadAllAdvTable(){
+    void reloadAllFilteredAdvTable(){
         // Get selected cat query value to pass SQL statement
         String catQueryValue = getCatComboBoxQueryValue();
         // Get selected period query value to pass SQL statement
@@ -122,10 +123,10 @@ public class UserController {
         String titleDescQueryValue = getTitleDescriptionQueryValue();
 
         // Get advertisements for advTable based on users filter selections
-        filteredAllAdvList = dbManager.getAdvertisements(catQueryValue, periodQueryValue, titleDescQueryValue);
+        filteredAllAdvList = dbManager.getFilteredAdvertisements(catQueryValue, periodQueryValue, titleDescQueryValue);
 
         // Add filtered Advs to ObservableList to populate table
-        advertisementsObservableList = FXCollections.observableList(filteredAllAdvList);
+        filteredAllAdvObservableList = FXCollections.observableList(filteredAllAdvList);
 
         // specify what properties to set the table columns
         // You enter in the NAME of the class property. ex: Advertisements has a advTitle property
@@ -135,11 +136,31 @@ public class UserController {
         userAdvDateCol.setCellValueFactory(new PropertyValueFactory<>("advDateTime"));
 
         // Initially set the Adv table
-        allAdvTableView.setItems(advertisementsObservableList);
+        filteredAllAdvTableView.setItems(filteredAllAdvObservableList);
+    }
+
+    private void reloadMyAdvTable(){
+        // Get advertisements for advTable based on users filter selections
+        myAdvList = dbManager.getMyAdvertisements(user.getUser_ID());
+
+        // Add filtered Advs to ObservableList to populate table
+        myAdvObservableList = FXCollections.observableList(myAdvList);
+
+        // specify what properties to set the table columns
+        // You enter in the NAME of the class property. ex: Advertisements has a advTitle property
+        userMyAdvIDCol.setCellValueFactory(new PropertyValueFactory<>("advertisement_ID"));
+        userMyTitleCol.setCellValueFactory(new PropertyValueFactory<>("advTitle"));
+        userMyAdvDescCol.setCellValueFactory(new PropertyValueFactory<>("advDetails"));
+        userMyPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        userMyStatusCol.setCellValueFactory(new PropertyValueFactory<>("status_ID"));
+        userMyAdvDate.setCellValueFactory(new PropertyValueFactory<>("advDateTime"));
+
+        // Initially set the Adv table
+        userAdvTable.setItems(myAdvObservableList);
     }
 
     public void goButtonPressed(ActionEvent actionEvent) {
-        reloadAllAdvTable();
+        reloadAllFilteredAdvTable();
     }
 
     public void editUserAdvButtonPressed(ActionEvent actionEvent) {
@@ -193,8 +214,8 @@ public class UserController {
     // TODO: test later
     public void deleteUserAdvButtonPressed(ActionEvent actionEvent) {
         ObservableList<Advertisements> advertisementsSelected, allAdvertisements;
-        allAdvertisements = allAdvTableView.getItems();
-        advertisementsSelected = allAdvTableView.getSelectionModel().getSelectedItems();
+        allAdvertisements = filteredAllAdvTableView.getItems();
+        advertisementsSelected = filteredAllAdvTableView.getSelectionModel().getSelectedItems();
         // TODO: delete row from database
         advertisementsSelected.forEach(allAdvertisements::remove); // for all ads that have been selected, remove them from allAdvertisements
 
@@ -253,7 +274,7 @@ public class UserController {
         if (eventTabIndex != selectedTabIndex) {
             selectedTabIndex = eventTabIndex;
             //Call refresh/set AllFilteredAdb table view
-            reloadAllAdvTable();
+            reloadAllFilteredAdvTable();
         }
     }
 
@@ -261,7 +282,8 @@ public class UserController {
         int eventTabIndex = userTabPane.getSelectionModel().getSelectedIndex();
         if (eventTabIndex != selectedTabIndex) {
             selectedTabIndex = eventTabIndex;
-            //TODO: Call refresh/set MyAdv table view
+            //Call refresh/set MyAdv table view
+            reloadMyAdvTable();
         }
     }
 

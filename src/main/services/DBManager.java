@@ -54,6 +54,7 @@ public class DBManager {
         this.connection = conn;
     }
 
+    // Method to call database to get user object
     public User getUser(String userName) {
         PreparedStatement stmt = null;
         User user = null;
@@ -104,13 +105,13 @@ public class DBManager {
         return false;
     }
 
+    // Method to call database for all advs based on filter qualifications
     // Return everything = ("%", "CURRENT_DATE()", "%")
     // Return only ELC ("ELC", "CURRENT_DATE()", "%")
     // Return last three months ("ELC", "3", "%")
     // Return title/desc like Smart ("ELC", "3", "Smart")
-    public List<Advertisements> getAdvertisements(String cat, String period, String advTitleDesc){
+    public List<Advertisements> getFilteredAdvertisements(String cat, String period, String advTitleDesc){
         PreparedStatement stmt;
-        List<Advertisements> advertisementsList = new ArrayList<>();
 
         String periodQuery = "?";
 
@@ -119,11 +120,15 @@ public class DBManager {
             periodQuery = period;
         }
 
-        String query = "SELECT Advertisement_ID, AdvTitle, AdvDetails, AdvDateTime, Price, User_ID, Moderator_ID, Category_ID, Status_ID " +
+        String query = "SELECT adv.Advertisement_ID, adv.AdvTitle, adv.AdvDetails, adv.AdvDateTime, adv.Price, adv.User_ID, adv.Moderator_ID, adv.Category_ID, Categories.Category_Name, adv.Status_ID, Statuses.Status_Name " +
                 "FROM Advertisements adv " +
-                "WHERE Category_ID LIKE ?" +
-                    "AND (AdvTitle LIKE ? OR AdvDetails LIKE ?)" +
-                    "AND TIMESTAMPDIFF(MONTH, AdvDateTime, CURRENT_DATE()) <= " + periodQuery;
+                "INNER JOIN Categories ON adv.Category_ID = Categories.Category_ID " +
+                "INNER JOIN Statuses ON adv.Status_ID = Statuses.Status_ID " +
+                "WHERE adv.Category_ID LIKE ? " +
+                    "AND (adv.AdvTitle LIKE ? OR adv.AdvDetails LIKE ?) " +
+                    "AND TIMESTAMPDIFF(MONTH, adv.AdvDateTime, CURRENT_DATE()) <= " + periodQuery;
+
+        ResultSet rs = null;
 
         try {
             stmt = connection.prepareStatement(query);
@@ -135,28 +140,72 @@ public class DBManager {
             if(!Objects.equals(period, "CURRENT_DATE()")) {
                 stmt.setString(4, period); //binding the parameter with the given string
             }
+            rs = stmt.executeQuery();
 
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                int adv_id = rs.getInt("Advertisement_ID");
-                String adv_title = rs.getString("AdvTitle");
-                String adv_date_time = rs.getString("AdvDateTime");
-                double price = rs.getDouble("Price");
-                String moderator_ID = rs.getString("Moderator_ID");
-                String status_ID = rs.getString("Status_ID");
-                String advDetails = rs.getString("AdvDetails");
-                String category_ID = rs.getString("Category_ID");
-
-                Advertisements adv = new Advertisements(adv_id, price, adv_title, advDetails, adv_date_time, moderator_ID, category_ID, status_ID);
-
-                // add new advertisement to List
-                advertisementsList.add(adv);
-            }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            return advertisementsList;
+            return null;
         }
-        return advertisementsList;
+
+        // Call method to take result set and turn into array list.
+        return  resultSetToAdvList(rs);
+    }
+
+    // Method to call database to get all users advs based on 1 filter
+    public List<Advertisements> getMyAdvertisements(String userId){
+        PreparedStatement stmt;
+
+        String query = "SELECT adv.Advertisement_ID, adv.AdvTitle, adv.AdvDetails, adv.AdvDateTime, adv.Price, adv.User_ID, adv.Moderator_ID, adv.Category_ID, Categories.Category_Name, adv.Status_ID, Statuses.Status_Name " +
+                "FROM Advertisements adv " +
+                "INNER JOIN Categories ON adv.Category_ID = Categories.Category_ID " +
+                "INNER JOIN Statuses ON adv.Status_ID = Statuses.Status_ID " +
+                "WHERE adv.User_ID = ? ";
+
+        ResultSet rs;
+
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, userId); //binding the parameter with the given string
+
+            rs = stmt.executeQuery();
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        // Call method to take result set and turn into array list.
+        return  resultSetToAdvList(rs);
+    }
+
+
+    // Method to parse result sed from db query into a List of Advs
+    private List<Advertisements> resultSetToAdvList(ResultSet advResultSet) {
+        List<Advertisements> advList = new ArrayList<>();
+
+        try{
+            while (advResultSet.next()) {
+                int adv_id = advResultSet.getInt("Advertisement_ID");
+                String adv_title = advResultSet.getString("AdvTitle");
+                String adv_date_time = advResultSet.getString("AdvDateTime");
+                double price = advResultSet.getDouble("Price");
+                String moderator_ID = advResultSet.getString("Moderator_ID");
+                String status_ID = advResultSet.getString("Status_ID");
+                String status_Name = advResultSet.getString("Status_Name");
+                String advDetails = advResultSet.getString("AdvDetails");
+                String category_ID = advResultSet.getString("Category_ID");
+                String category_Name = advResultSet.getString("Category_Name");
+                String user_ID = advResultSet.getString("User_ID");
+
+                Advertisements adv = new Advertisements(adv_id, price, adv_title, advDetails, adv_date_time, moderator_ID, category_ID, category_Name, status_ID, status_Name, user_ID);
+
+                // add new advertisement to List
+                advList.add(adv);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return advList;
+        }
+        return advList;
     }
 
     // We want to take the inputted data and put it into our table

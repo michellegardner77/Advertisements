@@ -43,7 +43,7 @@
                   </FXCollections>
                </items>
             </ComboBox>
-                <TableView fx:id="allAdvTableView" layoutY="79.0" prefHeight="200.0" prefWidth="611.0">
+                <TableView fx:id="filteredAllAdvTableView" layoutY="79.0" prefHeight="200.0" prefWidth="611.0">
                     <columns>
                         <TableColumn fx:id="userAdvTitleCol" prefWidth="186.99996948242188" text="Title" />
                         <TableColumn fx:id="userAdvDescCol" prefWidth="232.0" text="Description" />

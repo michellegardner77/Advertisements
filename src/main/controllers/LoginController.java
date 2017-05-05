@@ -3,7 +3,6 @@ package main.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -177,7 +176,7 @@ public class LoginController {
                 userStage.setScene(userScene);
 
                 // refresh AllFiltered Adv Table before showing scene
-                userController.reloadAllAdvTable();
+                userController.reloadAllFilteredAdvTable();
 
                 // Get current stage and close it.
                 // get source Node from actionEvent passed to action method

@@ -16,9 +16,13 @@ public class Advertisements{
     protected String moderator_ID;
     protected String category_ID;
     protected String status_ID;
-    public DBManager dbManager;
 
-    public Advertisements(int advertisement_ID, double price, String advTitle, String advDetails, String advDateTime,String  moderator_ID, String category_ID, String status_ID){
+    protected String category_name;
+    protected String status_name;
+    protected String user_id;
+
+
+    public Advertisements(int advertisement_ID, double price, String advTitle, String advDetails, String advDateTime,String  moderator_ID, String category_ID, String category_name, String status_ID, String status_name, String user_id){
         this.advertisement_ID = advertisement_ID;
         this.price = price;
         this.advTitle = advTitle;
@@ -26,7 +30,10 @@ public class Advertisements{
         this.advDateTime = advDateTime;
         this.moderator_ID = moderator_ID;
         this.category_ID = category_ID;
+        this.category_name = category_name;
         this.status_ID = status_ID;
+        this.status_name = status_name;
+        this.user_id = user_id;
     }
 
     public int getAdvertisement_ID(){
@@ -57,6 +64,15 @@ public class Advertisements{
     }
     public String getStatus_ID(){
         return status_ID;
+    }
+    public String getCategory_name(){
+        return category_name;
+    }
+    public String getStatus_name(){
+        return status_name;
+    }
+    public String getUser_id(){
+        return user_id;
     }
 
 
