@@ -289,6 +289,13 @@ public class UserController {
             // Show the addAdvertisementStage which already has the userScene FXML loaded
             addAdvertisementStage.showAndWait();
 
+            // Refresh visible table view
+            if (selectedTabIndex == 0) {
+                reloadAllFilteredAdvTable();
+            } else {
+                reloadMyAdvTable();
+            }
+
         } catch (IOException ex) {
             //TODO: deal with later.
             // Could be issues loading FXML file or something.

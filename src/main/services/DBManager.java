@@ -224,7 +224,7 @@ public class DBManager {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -241,7 +241,29 @@ public class DBManager {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean editUserAdvertisement(int advId, String userId, String advTitle, String advDesc, String advCat, Double advPrice) {
+        PreparedStatement stmt = null;
+
+        String query = "UPDATE Advertisements SET AdvTitle=?, AdvDetails=?, Price=?, Category_ID=? WHERE Advertisement_ID=? AND User_ID=?";
+
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, advTitle);
+            stmt.setString(2, advDesc);
+            stmt.setDouble(3, advPrice);
+            stmt.setString(4, advCat);
+            stmt.setInt(5, advId);
+            stmt.setString(6, userId);
+
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
             return false;
         }
 

@@ -58,10 +58,11 @@ public class EditAdvertisementController {
             return;
         }
 
+        Double newPriceValue;
         // checks to make sure Price is a double and turns it into a double
         //noinspection Duplicates
         try {
-            Double.parseDouble(advPriceTextField.getText());
+            newPriceValue = Double.parseDouble(advPriceTextField.getText());
         } catch (NumberFormatException e) {
 
             // print out error, not a double
@@ -74,10 +75,7 @@ public class EditAdvertisementController {
             return;
         }
 
-
-        //TODO: create an edit advertisement method for this vv
-        // dbManager.editAdvertisement(this will do a update not an insert)
-//     dbManager.addAdvertisement(editAdvertisementTitle, editAdvertisementDesc, editAdvPrice, editAdvertisementCategory, " " );
+        dbManager.editUserAdvertisement(advertisement.getAdvertisement_ID(),user.getUser_ID(), advTitleTextField.getText(), advDescTextArea.getText(), advTypeCombox.getValue(), newPriceValue);
 
         Node source = (Node) actionEvent.getSource();
         // calling the getWindow method to get the stage. Have to case to Stage
@@ -86,5 +84,7 @@ public class EditAdvertisementController {
         // Close the login window
         currentStage.close();
     }
+
+
 }
 
