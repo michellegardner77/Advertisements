@@ -342,6 +342,7 @@ public class DBManager {
 
         String query = "UPDATE Advertisements SET Status_ID='AC' WHERE Advertisement_ID=?";
 
+        //noinspection Duplicates
         try {
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, advId);
@@ -351,6 +352,23 @@ public class DBManager {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return false;
+        }
+
+    }
+
+    public void disapproveAdvertisement(int advId) {
+        PreparedStatement stmt = null;
+
+        String query = "UPDATE Advertisements SET Status_ID='DI' WHERE Advertisement_ID=?";
+
+        //noinspection Duplicates
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, advId);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
 
     }

@@ -251,5 +251,32 @@ public class ModeratorController {
     }
 
     public void disapproveButtonPressed(ActionEvent actionEvent) {
+        Advertisements selectedMyAdvertisement = moderatorAdvTable.getSelectionModel().getSelectedItem();
+
+        // doesn't do anything if nothing is selected
+        if(selectedMyAdvertisement == null){
+            return;
+        }
+
+        // don't allow disapproval of already disapproved items
+        if (Objects.equals(selectedMyAdvertisement.getStatus_ID(), "DI")) {
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Disapprove");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to disapprove this advertisement?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() != ButtonType.OK){
+            return;
+        }
+
+        // call db to update selected adv to be claimed
+        dbManager.disapproveAdvertisement(selectedMyAdvertisement.getAdvertisement_ID());
+
+        // refresh table
+        reloadModAdvTable();
     }
 }
