@@ -13,8 +13,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.UserController">
-    <TabPane fx:id="userTabPane" layoutX="-5.0" layoutY="54.0" prefHeight="347.0" prefWidth="611.0" tabClosingPolicy="UNAVAILABLE">
+<AnchorPane prefHeight="401.0" prefWidth="628.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.UserController">
+    <TabPane fx:id="userTabPane" layoutY="54.0" prefHeight="347.0" prefWidth="628.0" tabClosingPolicy="UNAVAILABLE">
         <Tab onSelectionChanged="#allAdvTabSelectionChanged" text="Advertisements">
             <Pane prefHeight="200.0" prefWidth="200.0">
                 <Button layoutX="515.0" layoutY="42.0" mnemonicParsing="false" onAction="#goButtonPressed" text="Go" />
@@ -43,7 +43,7 @@
                   </FXCollections>
                </items>
             </ComboBox>
-                <TableView fx:id="filteredAllAdvTableView" layoutY="79.0" prefHeight="200.0" prefWidth="611.0">
+                <TableView fx:id="filteredAllAdvTableView" layoutX="2.0" layoutY="79.0" prefHeight="200.0" prefWidth="628.0">
                     <columns>
                         <TableColumn fx:id="userAdvTitleCol" prefWidth="186.99996948242188" text="Title" />
                         <TableColumn fx:id="userAdvDescCol" prefWidth="232.0" text="Description" />
