@@ -56,6 +56,7 @@ public class UserController {
     // ObservableList of advs to populate all my adv table view
     private ObservableList<Advertisements> myAdvObservableList = null;
 
+    // var to hold the selected tab index
     private int selectedTabIndex;
 
     // method to pass DBManager to controller
@@ -124,7 +125,7 @@ public class UserController {
         String titleDescQueryValue = getTitleDescriptionQueryValue();
 
         // Get advertisements for advTable based on users filter selections
-        filteredAllAdvList = dbManager.getFilteredAdvertisements(catQueryValue, periodQueryValue, titleDescQueryValue);
+        filteredAllAdvList = dbManager.getFilteredAdvertisements(catQueryValue, periodQueryValue, titleDescQueryValue, "%", "%");
 
         // Add filtered Advs to ObservableList to populate table
         filteredAllAdvObservableList = FXCollections.observableList(filteredAllAdvList);
@@ -322,4 +323,8 @@ public class UserController {
         }
     }
 
+    // press enter in search text field
+    public void onGoEnter(ActionEvent actionEvent) {
+        goButtonPressed(actionEvent);
+    }
 }

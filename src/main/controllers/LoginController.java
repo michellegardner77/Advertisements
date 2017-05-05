@@ -126,6 +126,9 @@ public class LoginController {
                 // Think of the stage as the window with the "X" button and the scene the contents inside
                 moderatorStage.setScene(userScene);
 
+                // load initial table before shown. After controller is loaded
+                moderatorController.reloadUnclaimedAdvTable();
+
 
                 // Get current stage and close it.
                 // get source Node from actionEvent passed to action method

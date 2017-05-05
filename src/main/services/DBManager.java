@@ -110,14 +110,23 @@ public class DBManager {
     // Return only ELC ("ELC", "CURRENT_DATE()", "%")
     // Return last three months ("ELC", "3", "%")
     // Return title/desc like Smart ("ELC", "3", "Smart")
-    public List<Advertisements> getFilteredAdvertisements(String cat, String period, String advTitleDesc){
+    public List<Advertisements> getFilteredAdvertisements(String cat, String period, String advTitleDesc, String advStatus, String advMod){
         PreparedStatement stmt;
 
-        String periodQuery = "?";
+        String periodFilter = "?";
+
+        String modFilter1 = "LIKE";
+        String modFilter2 = "?";
 
         // Injecting function into sql statement if passed in as string else will stay as prepared string
         if(Objects.equals(period, "CURRENT_DATE()")){
-            periodQuery = period;
+            periodFilter = period;
+        }
+
+        // Injecting function into sql statement if passed in as string else will stay as prepared string
+        if(Objects.equals(advMod, "NULL")){
+            modFilter1 = "";
+            modFilter2 = "IS NULL";
         }
 
         String query = "SELECT adv.Advertisement_ID, adv.AdvTitle, adv.AdvDetails, adv.AdvDateTime, adv.Price, adv.User_ID, adv.Moderator_ID, adv.Category_ID, Categories.Category_Name, adv.Status_ID, Statuses.Status_Name " +
@@ -126,7 +135,9 @@ public class DBManager {
                 "INNER JOIN Statuses ON adv.Status_ID = Statuses.Status_ID " +
                 "WHERE adv.Category_ID LIKE ? " +
                     "AND (adv.AdvTitle LIKE ? OR adv.AdvDetails LIKE ?) " +
-                    "AND TIMESTAMPDIFF(MONTH, adv.AdvDateTime, CURRENT_DATE()) <= " + periodQuery;
+                    "AND adv.Status_ID LIKE ? " +
+                    "AND TIMESTAMPDIFF(MONTH, adv.AdvDateTime, CURRENT_DATE()) <= " + periodFilter +
+                    "AND adv.Moderator_ID "+ modFilter1 + modFilter2;
 
         ResultSet rs = null;
 
@@ -135,11 +146,18 @@ public class DBManager {
             stmt.setString(1, cat); //binding the parameter with the given string
             stmt.setString(2, "%"+advTitleDesc+"%"); //binding the parameter with the given string
             stmt.setString(3, "%"+advTitleDesc+"%"); //binding the parameter with the given string
+            stmt.setString(4, "%"+advStatus+"%"); //binding the parameter with the given string
 
             // if period parameter is not CURRENT_DATE() function then just set ? to query values
             if(!Objects.equals(period, "CURRENT_DATE()")) {
-                stmt.setString(4, period); //binding the parameter with the given string
+                stmt.setString(5, period); //binding the parameter with the given string
             }
+
+            // if mod parameter is not NULL  then just set ? to query values
+            if(!Objects.equals(advMod, "NULL")) {
+                stmt.setString(6, advMod); //binding the parameter with the given string
+            }
+
             rs = stmt.executeQuery();
 
         } catch (SQLException e) {
@@ -259,6 +277,25 @@ public class DBManager {
             stmt.setString(4, advCat);
             stmt.setInt(5, advId);
             stmt.setString(6, userId);
+
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
+
+    }
+
+    public boolean claimAdvertisement(int advId, String modId) {
+        PreparedStatement stmt = null;
+
+        String query = "UPDATE Advertisements SET Moderator_ID=? WHERE Advertisement_ID=?";
+
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, modId);
+            stmt.setInt(2, advId);
 
             stmt.executeUpdate();
             return true;

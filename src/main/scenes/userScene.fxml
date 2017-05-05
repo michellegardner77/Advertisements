@@ -18,7 +18,7 @@
         <Tab onSelectionChanged="#allAdvTabSelectionChanged" text="Advertisements">
             <Pane prefHeight="200.0" prefWidth="200.0">
                 <Button layoutX="515.0" layoutY="42.0" mnemonicParsing="false" onAction="#goButtonPressed" text="Go" />
-                <TextField fx:id="titleDescTextField" layoutX="322.0" layoutY="42.0" />
+                <TextField fx:id="titleDescTextField" layoutX="322.0" layoutY="42.0" onAction="#onGoEnter" />
                 <Label layoutX="322.0" layoutY="14.0" text="Title, Description" />
                 <Label layoutX="40.0" layoutY="14.0" text="Category" />
                 <Label layoutX="182.0" layoutY="14.0" text="Period" />
