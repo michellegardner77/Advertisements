@@ -3,6 +3,7 @@ package main.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
@@ -18,11 +19,9 @@ import java.util.Optional;
  * Created by mgard on 5/2/2017.
  */
 public class ModeratorController {
-    public Tab modUnclaimedPanel;
     public Pane moderatorUnclaimedTab;
     public TableView<Advertisements> unclaimedAdvTable;
-    public Tab moderatorAdvTab;
-    public TableView moderatorAdvTable;
+    public TableView<Advertisements> moderatorAdvTable;
     public TextField unclaimedAdvTitleDescFilter;
     public ComboBox unclaimedCatFilterComBox;
     public ComboBox unclaimedPeriodFilterComBox;
@@ -32,6 +31,14 @@ public class ModeratorController {
     public TableColumn<Object, Object> unclaimedAdvPriceCol;
     public TableColumn<Object, Object> unclaimedAdvDateCol;
     public TableColumn<Object, Object> unclaimedAdvUserCol;
+    public TabPane tabPane;
+    public TableColumn<Object, Object> moderatorAdvStatusCol;
+    public TableColumn<Object, Object> moderatorAdvIdCol;
+    public TableColumn<Object, Object> moderatorAdvTitleCol;
+    public TableColumn<Object, Object> moderatorAdvDescCol;
+    public TableColumn<Object, Object> moderatorAdvPriceCol;
+    public TableColumn<Object, Object> moderatorAdvDateCol;
+    public TableColumn<Object, Object> moderatorAdvUserCol;
 
     private User user;
     private DBManager dbManager;
@@ -135,6 +142,29 @@ public class ModeratorController {
         unclaimedAdvTable.setItems(unclaimedFilteredAdvObservableList);
     }
 
+    // get unclaimed data and load table with records
+    private void reloadModAdvTable(){
+
+        // Get my advertisements
+        myAdvList = dbManager.getMyAdvertisements(user.getUser_ID());
+
+        // Add Advs to ObservableList to populate table
+        myAdvObservableList = FXCollections.observableList(myAdvList);
+
+        // specify what properties to set the table columns
+        // You enter in the NAME of the class property. ex: Advertisements has a advTitle property
+        moderatorAdvIdCol.setCellValueFactory(new PropertyValueFactory<>("advertisement_ID"));
+        moderatorAdvTitleCol.setCellValueFactory(new PropertyValueFactory<>("advTitle"));
+        moderatorAdvDescCol.setCellValueFactory(new PropertyValueFactory<>("advDetails"));
+        moderatorAdvPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        moderatorAdvStatusCol.setCellValueFactory(new PropertyValueFactory<>("status_ID"));
+        moderatorAdvDateCol.setCellValueFactory(new PropertyValueFactory<>("advDateTime"));
+        moderatorAdvUserCol.setCellValueFactory(new PropertyValueFactory<>("user_id"));
+
+        // Initially set the Adv table
+        moderatorAdvTable.setItems(myAdvObservableList);
+    }
+
 
     // refresh table when you press go button
     public void uncGoButtonPressed(ActionEvent actionEvent) {
@@ -142,9 +172,38 @@ public class ModeratorController {
     }
 
     public void approveButtonPressed(ActionEvent actionEvent) {
+        Advertisements selectedMyAdvertisement = moderatorAdvTable.getSelectionModel().getSelectedItem();
+
+        // doesn't do anything if nothing is selected
+        if(selectedMyAdvertisement == null){
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Approve");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to approve this advertisement?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() != ButtonType.OK){
+            return;
+        }
+
+        // call db to update selected adv to be claimed
+        dbManager.approveAdvertisement(selectedMyAdvertisement.getAdvertisement_ID());
+
+        // refresh table
+        reloadModAdvTable();
     }
 
     public void claimSelectedAd(ActionEvent actionEvent) {
+
+        Advertisements selectedUnclaimedAdvertisement = unclaimedAdvTable.getSelectionModel().getSelectedItem();
+
+        // doesn't do anything if nothing is selected
+        if(selectedUnclaimedAdvertisement == null){
+            return;
+        }
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Claim");
@@ -153,13 +212,6 @@ public class ModeratorController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() != ButtonType.OK){
-            return;
-        }
-
-        Advertisements selectedUnclaimedAdvertisement = unclaimedAdvTable.getSelectionModel().getSelectedItem();
-
-        // doesn't do anything if nothing is selected
-        if(selectedUnclaimedAdvertisement == null){
             return;
         }
 
@@ -173,5 +225,23 @@ public class ModeratorController {
     // press enter in title/desk field refreshes table
     public void onGoEnter(ActionEvent actionEvent) {
         uncGoButtonPressed(actionEvent);
+    }
+
+    public void unclaimedTabSelectionChanged(Event event) {
+        int eventTabIndex = tabPane.getSelectionModel().getSelectedIndex();
+        if (eventTabIndex != selectedTabIndex) {
+            selectedTabIndex = eventTabIndex;
+            //Call refresh/set AllFilteredAdb table view
+            reloadUnclaimedAdvTable();
+        }
+    }
+
+    public void modMyAdvTabSelectionChanged(Event event) {
+        int eventTabIndex = tabPane.getSelectionModel().getSelectedIndex();
+        if (eventTabIndex != selectedTabIndex) {
+            selectedTabIndex = eventTabIndex;
+            //Call refresh/set MyAdv table view
+            reloadModAdvTable();
+        }
     }
 }

@@ -14,13 +14,13 @@
 <?import javafx.scene.layout.Pane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.ModeratorController">
-    <TabPane layoutX="1.0" layoutY="6.0" prefHeight="392.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
-        <Tab fx:id="modUnclaimedPanel" text="Unclaimed Advertisements">
+    <TabPane fx:id="tabPane" layoutX="1.0" layoutY="6.0" prefHeight="392.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab onSelectionChanged="#unclaimedTabSelectionChanged" text="Unclaimed Advertisements">
             <Pane fx:id="moderatorUnclaimedTab" prefHeight="200.0" prefWidth="200.0">
                 <Label layoutX="43.0" layoutY="17.0" text="Category" />
                 <Label layoutX="187.0" layoutY="17.0" prefHeight="17.0" prefWidth="37.0" text="Period" />
                 <Label layoutX="308.0" layoutY="23.0" text="Title, Description" />
-                <TextField fx:id="unclaimedAdvTitleDescFilter" layoutX="308.0" layoutY="38.0" onAction="#onGoEnter"/>
+                <TextField fx:id="unclaimedAdvTitleDescFilter" layoutX="308.0" layoutY="38.0" onAction="#onGoEnter" />
                 <Button layoutX="474.0" layoutY="38.0" mnemonicParsing="false" onAction="#uncGoButtonPressed" text="Go" />
                 <ComboBox fx:id="unclaimedCatFilterComBox" layoutX="32.0" layoutY="36.0" prefHeight="25.0" prefWidth="100.0" value="All">
                     <items>
@@ -56,18 +56,18 @@
             <Button layoutX="522.0" layoutY="38.0" mnemonicParsing="false" onAction="#claimSelectedAd" text="Claim Ad" />
             </Pane>
         </Tab>
-        <Tab fx:id="moderatorAdvTab" text="My Advertisements">
+        <Tab onSelectionChanged="#modMyAdvTabSelectionChanged" text="My Advertisements">
             <Pane prefHeight="200.0" prefWidth="200.0">
                 <Button layoutX="488.0" layoutY="14.0" mnemonicParsing="false" onAction="#approveButtonPressed" text="Approve" />
                 <TableView fx:id="moderatorAdvTable" layoutX="-2.0" layoutY="54.0" prefHeight="301.0" prefWidth="600.0">
                     <columns>
-                        <TableColumn prefWidth="75.0" text="ID" />
-                        <TableColumn prefWidth="75.0" text="Title" />
-                        <TableColumn prefWidth="132.0" text="Description" />
-                        <TableColumn prefWidth="65.0" text="Price" />
-                        <TableColumn prefWidth="78.0" text="Status" />
-                        <TableColumn prefWidth="75.0" text="Date" />
-                        <TableColumn prefWidth="99.0" text="Username" />
+                        <TableColumn fx:id="moderatorAdvIdCol" prefWidth="75.0" text="ID" />
+                        <TableColumn fx:id="moderatorAdvTitleCol" prefWidth="75.0" text="Title" />
+                        <TableColumn fx:id="moderatorAdvDescCol" prefWidth="132.0" text="Description" />
+                        <TableColumn fx:id="moderatorAdvPriceCol" prefWidth="65.0" text="Price" />
+                        <TableColumn fx:id="moderatorAdvStatusCol" prefWidth="78.0" text="Status" />
+                        <TableColumn fx:id="moderatorAdvDateCol" prefWidth="75.0" text="Date" />
+                        <TableColumn fx:id="moderatorAdvUserCol" prefWidth="99.0" text="Username" />
                     </columns>
                 </TableView>
             </Pane>

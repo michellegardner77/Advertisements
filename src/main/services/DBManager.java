@@ -127,6 +127,9 @@ public class DBManager {
         if(Objects.equals(advMod, "NULL")){
             modFilter1 = "";
             modFilter2 = "IS NULL";
+        } else if(Objects.equals(advMod, "%")){ // deal with wildcard with null column values
+            modFilter1 = "= \"%\" ";
+            modFilter2 = "OR adv.Moderator_ID IS NULL";
         }
 
         String query = "SELECT adv.Advertisement_ID, adv.AdvTitle, adv.AdvDetails, adv.AdvDateTime, adv.Price, adv.User_ID, adv.Moderator_ID, adv.Category_ID, Categories.Category_Name, adv.Status_ID, Statuses.Status_Name " +
@@ -137,7 +140,7 @@ public class DBManager {
                     "AND (adv.AdvTitle LIKE ? OR adv.AdvDetails LIKE ?) " +
                     "AND adv.Status_ID LIKE ? " +
                     "AND TIMESTAMPDIFF(MONTH, adv.AdvDateTime, CURRENT_DATE()) <= " + periodFilter +
-                    "AND adv.Moderator_ID "+ modFilter1 + modFilter2;
+                    "AND (adv.Moderator_ID "+ modFilter1 + modFilter2 + ")";
 
         ResultSet rs = null;
 
@@ -153,8 +156,8 @@ public class DBManager {
                 stmt.setString(5, period); //binding the parameter with the given string
             }
 
-            // if mod parameter is not NULL  then just set ? to query values
-            if(!Objects.equals(advMod, "NULL")) {
+            // if mod parameter is not NULL and % then just set ? to query values
+            if(!Objects.equals(advMod, "NULL") && !Objects.equals(advMod, "%")) {
                 stmt.setString(6, advMod); //binding the parameter with the given string
             }
 
@@ -296,6 +299,24 @@ public class DBManager {
             stmt = connection.prepareStatement(query);
             stmt.setString(1, modId);
             stmt.setInt(2, advId);
+
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
+
+    }
+
+    public boolean approveAdvertisement(int advId) {
+        PreparedStatement stmt = null;
+
+        String query = "UPDATE Advertisements SET Status_ID='AC' WHERE Advertisement_ID=?";
+
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, advId);
 
             stmt.executeUpdate();
             return true;
