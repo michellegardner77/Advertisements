@@ -154,7 +154,7 @@ public class UserController {
         userMyTitleCol.setCellValueFactory(new PropertyValueFactory<>("advTitle"));
         userMyAdvDescCol.setCellValueFactory(new PropertyValueFactory<>("advDetails"));
         userMyPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        userMyStatusCol.setCellValueFactory(new PropertyValueFactory<>("status_ID"));
+        userMyStatusCol.setCellValueFactory(new PropertyValueFactory<>("status_name"));
         userMyAdvDate.setCellValueFactory(new PropertyValueFactory<>("advDateTime"));
 
         // Initially set the Adv table

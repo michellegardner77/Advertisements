@@ -58,7 +58,7 @@
         </Tab>
         <Tab onSelectionChanged="#modMyAdvTabSelectionChanged" text="My Advertisements">
             <Pane prefHeight="200.0" prefWidth="200.0">
-                <Button layoutX="488.0" layoutY="14.0" mnemonicParsing="false" onAction="#approveButtonPressed" text="Approve" />
+                <Button layoutX="427.0" layoutY="14.0" mnemonicParsing="false" onAction="#approveButtonPressed" text="Approve" />
                 <TableView fx:id="moderatorAdvTable" layoutX="-2.0" layoutY="54.0" prefHeight="301.0" prefWidth="600.0">
                     <columns>
                         <TableColumn fx:id="moderatorAdvIdCol" prefWidth="75.0" text="ID" />
@@ -70,6 +70,7 @@
                         <TableColumn fx:id="moderatorAdvUserCol" prefWidth="99.0" text="Username" />
                     </columns>
                 </TableView>
+            <Button layoutX="496.0" layoutY="14.0" mnemonicParsing="false" onAction="#disapproveButtonPressed" text="Disapprove" />
             </Pane>
         </Tab>
     </TabPane>

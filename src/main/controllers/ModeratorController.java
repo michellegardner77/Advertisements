@@ -157,7 +157,7 @@ public class ModeratorController {
         moderatorAdvTitleCol.setCellValueFactory(new PropertyValueFactory<>("advTitle"));
         moderatorAdvDescCol.setCellValueFactory(new PropertyValueFactory<>("advDetails"));
         moderatorAdvPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        moderatorAdvStatusCol.setCellValueFactory(new PropertyValueFactory<>("status_ID"));
+        moderatorAdvStatusCol.setCellValueFactory(new PropertyValueFactory<>("status_name"));
         moderatorAdvDateCol.setCellValueFactory(new PropertyValueFactory<>("advDateTime"));
         moderatorAdvUserCol.setCellValueFactory(new PropertyValueFactory<>("user_id"));
 
@@ -176,6 +176,11 @@ public class ModeratorController {
 
         // doesn't do anything if nothing is selected
         if(selectedMyAdvertisement == null){
+            return;
+        }
+
+        // don't allow approval of already approved items
+        if (Objects.equals(selectedMyAdvertisement.getStatus_ID(), "AC")) {
             return;
         }
 
@@ -243,5 +248,8 @@ public class ModeratorController {
             //Call refresh/set MyAdv table view
             reloadModAdvTable();
         }
+    }
+
+    public void disapproveButtonPressed(ActionEvent actionEvent) {
     }
 }
