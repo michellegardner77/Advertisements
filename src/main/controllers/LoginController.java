@@ -176,6 +176,8 @@ public class LoginController {
                 // Think of the stage as the window with the "X" button and the scene the contents inside
                 userStage.setScene(userScene);
 
+                // refresh AllFiltered Adv Table before showing scene
+                userController.reloadAllAdvTable();
 
                 // Get current stage and close it.
                 // get source Node from actionEvent passed to action method

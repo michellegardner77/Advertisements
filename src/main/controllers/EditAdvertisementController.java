@@ -11,8 +11,6 @@ import main.services.DBManager;
  * Created by mgard on 5/4/2017.
  */
 public class EditAdvertisementController {
-
-
     public TextField userEditTextField;
     public TextArea userEditDescTextArea;
     public TextField userEditPriceTextField;
@@ -20,13 +18,13 @@ public class EditAdvertisementController {
     public Label requiredLabel2;
     public Label requiredLabel3;
     public Label requiredLabel4;
-    public ComboBox userEditComboBox;
+    public ComboBox typeComboBox;
 
     private User user;
     private DBManager dbManager;
 
     // method to pass DBManager to controller
-    void setDbManager(DBManager dbManager) {
+    void setDbManager(DBManager dbManager){
         this.dbManager = dbManager;
     }
 
@@ -37,9 +35,10 @@ public class EditAdvertisementController {
 
     public void userSubmitEditButtonPressed(ActionEvent actionEvent) {
 
+        String editComboBox = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
 
-        if (userEditTextField.getText().isEmpty() || userEditDescTextArea.getText().isEmpty() || userEditPriceTextField.getText().isEmpty() || userEditComboBox.isEmpty()) {
-            userEditComboBox = String.valueOf(userEditComboBox.getSelectionModel().getSelectedItem());
+        if (userEditTextField.getText().isEmpty() || userEditDescTextArea.getText().isEmpty() || userEditPriceTextField.getText().isEmpty() || editComboBox.isEmpty()) {
+            editComboBox = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
             requiredLabel.setVisible(true);
             requiredLabel2.setVisible(true);
             requiredLabel3.setVisible(true);
@@ -47,20 +46,20 @@ public class EditAdvertisementController {
             return;
         }
 
-        String advertisementTitle;
-        String advertisementDetail;
-        String advertisementPrice;
-        String advertisementCategory;
-        Double advPrice;
+        String editAdvertisementTitle;
+        String editAdvertisementDesc;
+        String editAdvertisementPrice;
+        String editAdvertisementCategory;
+        Double editAdvPrice;
 
-        advertisementTitle = userEditTextField.getText();
-        advertisementDetail = userEditDescTextArea.getText();
-        advertisementPrice = userEditPriceTextField.getText();
-        advertisementCategory = String.valueOf(userEditComboBox.getSelectionModel().getSelectedItem());
+        editAdvertisementTitle = userEditTextField.getText();
+        editAdvertisementDesc = userEditDescTextArea.getText();
+        editAdvertisementPrice = userEditPriceTextField.getText();
+        editAdvertisementCategory = String.valueOf(typeComboBox.getSelectionModel().getSelectedItem());
 
         // checks to make sure Price is a double and turns it into a double
         try {
-            advPrice = Double.parseDouble(advertisementPrice);
+            editAdvPrice = Double.parseDouble(editAdvertisementPrice);
         } catch (NumberFormatException e) {
             // print out error, not a double
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -74,7 +73,8 @@ public class EditAdvertisementController {
 
 
         //TODO: create an edit advertisement method for this vv
-//     dbManager.addAdvertisement(advertisementTitle, advertisementDetail, advPrice, advertisementCategory, " " );
+        // dbManager.editAdvertisement(this will do a update not an insert)
+//     dbManager.addAdvertisement(editAdvertisementTitle, editAdvertisementDesc, editAdvPrice, editAdvertisementCategory, " " );
 
         Node source = (Node) actionEvent.getSource();
         // calling the getWindow method to get the stage. Have to case to Stage

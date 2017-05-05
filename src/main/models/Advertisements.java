@@ -1,5 +1,7 @@
 package main.models;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import main.services.DBManager;
 
 /**
@@ -30,6 +32,11 @@ public class Advertisements{
     public int getAdvertisement_ID(){
         return advertisement_ID;
     }
+    // do we need this? The tutorials show it
+//    public int setAdvertisement_ID(int advID){
+//        this.set(advID);
+//    }
+
     public double getPrice(){
         return price;
     }
@@ -51,4 +58,6 @@ public class Advertisements{
     public String getStatus_ID(){
         return status_ID;
     }
+
+
 }

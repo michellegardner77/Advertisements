@@ -14,8 +14,8 @@
 <?import javafx.scene.layout.Pane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.UserController">
-    <TabPane layoutX="-5.0" layoutY="54.0" prefHeight="347.0" prefWidth="611.0" tabClosingPolicy="UNAVAILABLE">
-        <Tab text="Advertisements">
+    <TabPane fx:id="userTabPane" layoutX="-5.0" layoutY="54.0" prefHeight="347.0" prefWidth="611.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab onSelectionChanged="#allAdvTabSelectionChanged" text="Advertisements">
             <Pane prefHeight="200.0" prefWidth="200.0">
                 <Button layoutX="515.0" layoutY="42.0" mnemonicParsing="false" onAction="#goButtonPressed" text="Go" />
                 <TextField fx:id="titleDescTextField" layoutX="322.0" layoutY="42.0" />
@@ -26,7 +26,7 @@
                <items>
                   <FXCollections fx:factory="observableArrayList">
                       <String fx:value="All" />
-                      <String fx:value="CAT"/>
+                      <String fx:value="CAT" />
                       <String fx:value="HOU" />
                       <String fx:value="ELC" />
                       <String fx:value="CCA" />
@@ -36,35 +36,35 @@
             <ComboBox fx:id="periodComBox" layoutX="166.0" layoutY="42.0" prefHeight="25.0" prefWidth="100.0" value="3 Months">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                      <String fx:value="3 Months"/>
+                      <String fx:value="3 Months" />
                       <String fx:value="6 Months" />
                       <String fx:value="12 Months" />
                       <String fx:value="Life" />
                   </FXCollections>
                </items>
             </ComboBox>
-                <TableView fx:id="advTable" layoutY="79.0" prefHeight="200.0" prefWidth="611.0">
+                <TableView fx:id="allAdvTableView" layoutY="79.0" prefHeight="200.0" prefWidth="611.0">
                     <columns>
-                        <TableColumn prefWidth="186.99996948242188" text="Title" />
-                        <TableColumn prefWidth="232.0" text="Description" />
-                        <TableColumn prefWidth="101.0" text="Price" />
-                        <TableColumn prefWidth="90.0" text="Date" />
+                        <TableColumn fx:id="userAdvTitleCol" prefWidth="186.99996948242188" text="Title" />
+                        <TableColumn fx:id="userAdvDescCol" prefWidth="232.0" text="Description" />
+                        <TableColumn fx:id="userAdvPriceCol" prefWidth="101.0" text="Price" />
+                        <TableColumn fx:id="userAdvDateCol" prefWidth="90.0" text="Date" />
                     </columns>
                 </TableView>
             </Pane>
         </Tab>
-        <Tab text="My Advertisements">
+        <Tab onSelectionChanged="#myAdvTabSelectionChanged" text="My Advertisements">
             <Pane prefHeight="200.0" prefWidth="200.0">
                 <Button layoutX="383.0" layoutY="14.0" mnemonicParsing="false" onAction="#editUserAdvButtonPressed" prefHeight="31.0" prefWidth="73.0" text="Edit" />
                 <Button layoutX="482.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteUserAdvButtonPressed" prefHeight="31.0" prefWidth="77.0" text="Delete" />
                 <TableView fx:id="userAdvTable" layoutX="5.0" layoutY="60.0" prefHeight="226.0" prefWidth="621.0">
                     <columns>
-                        <TableColumn prefWidth="85.99996948242188" text="ID" />
-                        <TableColumn prefWidth="105.0" text="Title" />
-                        <TableColumn prefWidth="131.0" text="Description" />
-                        <TableColumn prefWidth="105.0" text="Price" />
-                        <TableColumn prefWidth="94.0" text="Status" />
-                        <TableColumn prefWidth="90.0" text="Date" />
+                        <TableColumn fx:id="userMyAdvIDCol" prefWidth="85.99996948242188" text="ID" />
+                        <TableColumn fx:id="userMyTitleCol" prefWidth="105.0" text="Title" />
+                        <TableColumn fx:id="userMyAdvDescCol" prefWidth="131.0" text="Description" />
+                        <TableColumn fx:id="userMyPriceCol" prefWidth="105.0" text="Price" />
+                        <TableColumn fx:id="userMyStatusCol" prefWidth="94.0" text="Status" />
+                        <TableColumn fx:id="userMyAdvDate" prefWidth="90.0" text="Date" />
                     </columns>
                 </TableView>
             </Pane>
